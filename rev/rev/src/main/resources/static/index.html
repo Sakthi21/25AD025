@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Java Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="box">
+    <h1>Java Basics Quiz</h1>
+
+    <div id="start">
+        <input id="name" placeholder="Enter Name">
+        <input id="email" placeholder="Enter Email">
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <div id="quiz" style="display:none">
+        <h2 id="title"></h2>
+        <div id="questions"></div>
+        <button onclick="submitQuiz()">Submit</button>
+    </div>
+
+    <div id="result" style="display:none">
+        <h2>Quiz Completed!</h2>
+        <p id="score"></p>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

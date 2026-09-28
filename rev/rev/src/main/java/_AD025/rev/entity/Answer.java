@@ -1,4 +1,5 @@
 package _AD025.rev.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 @Entity
 @Table(name = "answer")
@@ -11,6 +12,7 @@ public class Answer {
     private boolean correct;
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
+    @JsonIgnore
     private Question question;
     public Answer() {
     }
