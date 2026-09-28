@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LapCompare – Ultra Premium Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { margin:0; font-family:'Poppins',sans-serif; background:linear-gradient(120deg,#1a2a6c,#b21f1f,#fdbb2d); background-size:300% 300%; animation:bgMove 12s infinite; color:white; }
+@keyframes bgMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+header { text-align:center; padding:30px 0; font-size:45px; font-weight:700; text-shadow:0 0 18px rgba(0,0,0,0.4); }
+.container { max-width:1050px; margin:auto; background:rgba(0,0,0,0.45); padding:35px; border-radius:25px; backdrop-filter:blur(14px); box-shadow:0 0 25px rgba(0,0,0,0.6); animation:fadeIn 1.2s ease; }
+@keyframes fadeIn {0%{opacity:0;transform:translateY(40px);}100%{opacity:1;transform:translateY(0);}}
+.row { display:flex; gap:20px; margin-bottom:20px; }
+select { flex:1; padding:15px; border-radius:12px; border:none; font-size:17px; }
+button { width:100%; padding:18px; font-size:20px; border:none; border-radius:14px; background:#00e5ff; color:black; font-weight:700; cursor:pointer; transition:.3s; }
+button:hover { background:white; transform:scale(1.05); }
+#result table { width:100%; margin-top:25px; border-collapse:collapse; font-size:18px; }
+th,td { border:1px solid rgba(255,255,255,0.3); padding:12px; text-align:center; }
+th { background:#00e5ff; color:black; font-size:22px; }
+.highlight { background:#00ff85; color:black; font-weight:700; }
+.laptop-box { display:flex; justify-content:space-around; margin-top:20px; gap:25px; }
+.card { width:45%; background:rgba(255,255,255,0.15); padding:15px; border-radius:18px; box-shadow:0 0 18px rgba(0,0,0,.4); text-align:center; }
+.card img { width:260px; border-radius:15px; }
+canvas { margin-top:35px; }
+</style>
+</head>
+<body>
+<header>⚡ LapCompare – Next‑Level Smart Laptop Comparison</header>
+<div class="container">
+<h2 style="text-align:center; font-size:28px;">Select & Compare Two Laptops</h2>
+<div class="row">
+<select id="laptop1"><option value="">-- Select Laptop 1 --</option><option value="Dell">Dell Inspiron</option><option value="HP">HP Pavilion</option><option value="Lenovo">Lenovo IdeaPad</option><option value="Asus">Asus VivoBook</option><option value="Acer">Acer Aspire 7</option></select>
+<select id="laptop2"><option value="">-- Select Laptop 2 --</option><option value="Dell">Dell Inspiron</option><option value="HP">HP Pavilion</option><option value="Lenovo">Lenovo IdeaPad</option><option value="Asus">Asus VivoBook</option><option value="Acer">Acer Aspire 7</option></select>
+</div>
+<button onclick="compareLaptops()">🔥 Compare Instantly</button>
+<div id="cards"></div>
+<div id="result"></div>
+<canvas id="chart"></canvas>
+</div>
+
+<script>
+const laptops = {
+ "Dell": { img:"https://i.ibb.co/xFwnghM/dell.jpg", processor:"Intel i5 12th Gen", ram:8, storage:512, gpu:"Intel Iris Xe", display:"15.6\" FHD", battery:8, price:58000 },
+ "HP": { img:"https://i.ibb.co/G9WPn4b/hp.jpg", processor:"Intel i7 13th Gen", ram:16, storage:1000, gpu:"MX450", display:"15.6\" FHD", battery:9, price:75000 },
+ "Lenovo": { img:"https://i.ibb.co/D54rSdy/lenovo.jpg", processor:"Ryzen 5 5500U", ram:8, storage:512, gpu:"Radeon", display:"15.6\" FHD", battery:7, price:62000 },
+ "Asus": { img:"https://i.ibb.co/Tkj701C/asus.jpg", processor:"Ryzen 7 5700U", ram:16, storage:1000, gpu:"GTX1650", display:"15.6\" 144Hz", battery:6, price:82000 },
+ "Acer": { img:"https://i.ibb.co/2MZC2yM/acer.jpg", processor:"Intel i5 11th Gen", ram:8, storage:512, gpu:"GTX1650", display:"15.6\" 120Hz", battery:7.5, price:69000 }
+};
+
+function compareLaptops(){
+ let l1 = document.getElementById("laptop1").value;
+ let l2 = document.getElementById("laptop2").value;
+ let output = document.getElementById("result");
+ let cards = document.getElementById("cards");
+ if(!l1||!l2){ output.innerHTML=<p style='text-align:center;font-size:22px;color:#ff1744;'>⚠ Select Both Models</p>; return; }
+ if(l1===l2){ output.innerHTML=<p style='text-align:center;font-size:22px;color:#ff1744;'>⚠ Models Must Be Different</p>; return; }
+ cards.innerHTML = `
+ <div class='laptop-box'>
+ <div class='card'><h3>${l1}</h3><img src='${laptops[l1].img}'></div>
+ <h1 style='align-self:center;'>VS</h1>
+ <div class='card'><h3>${l2}</h3><img src='${laptops[l2].img}'></div>
+ </div>`;
+
+ const table = `<table><tr><th>Feature</th><th>${l1}</th><th>${l2}</th></tr>
+ <tr><td>RAM (GB)</td><td>${laptops[l1].ram}</td><td>${laptops[l2].ram}</td></tr>
+ <tr><td>Storage (GB)</td><td>${laptops[l1].storage}</td><td>${laptops[l2].storage}</td></tr>
+ <tr><td>Battery Life (Hours)</td><td>${laptops[l1].battery}</td><td>${laptops[l2].battery}</td></tr>
+ <tr><td>Price</td><td>₹${laptops[l1].price}</td><td>₹${laptops[l2].price}</td></tr></table>`;
+ output.innerHTML = table;
+ drawChart(laptops[l1], laptops[l2], l1, l2);
+}
+
+let chartInstance;
+function drawChart(a,b,n1,n2){
+ const ctx = document.getElementById("chart");
+ if(chartInstance) chartInstance.destroy();
+ chartInstance=new Chart(ctx,{ type:'bar', data:{ labels:['RAM','Storage','Battery'], datasets:[{label:n1,data:[a.ram,a.storage,a.battery]},{label:n2,data:[b.ram,b.storage,b.battery]}] } });
+}
+</script>
+</body>
+</html>
